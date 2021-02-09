@@ -21,20 +21,21 @@ int check(int num, int *map)
 
 void createFile(int maxFigure, int numberOfFigure, char *filename)
 {
-    int mapSize = maxFigure / 5 + 1;
+    int mapSize = maxFigure / 32 + 1;
     int *map = (int *)calloc(mapSize, sizeof(int));
     if (!map)
         return;
     FILE *fp = fopen(filename, "w+");
     srand((unsigned)time(NULL));
+    //do loop until genrate enough numbers
     while (numberOfFigure)
     {
-        // printf("%d\n", numberOfFigure);
         int num = rand() % maxFigure;
+        //check if num is in map
         int res = check(num, map);
-        if (!res)
+        if (!res) // if num is not in map
         {
-            set(num, map);
+            set(num, map); // add num into map
             fprintf(fp, "%d ", num);
             numberOfFigure--;
         }
@@ -45,7 +46,7 @@ void createFile(int maxFigure, int numberOfFigure, char *filename)
 
 void writeMap(char *filename, int maxFigure, int **map)
 {
-    int mapSize = maxFigure / 5 + 1;
+    int mapSize = maxFigure / 32 + 1;
     *map = (int *)calloc(mapSize, sizeof(int));
     FILE *fp = fopen(filename, "r");
     if (!fp)
