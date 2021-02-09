@@ -1,8 +1,7 @@
 //
 // Created by hu on 2021/2/3.
 //
-
-#include "fileOperation.h"
+#include "../include/fileOperation.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -57,16 +56,16 @@ void writeMap(char *filename, int maxFigure, int **map)
     int num;
     while (!feof(fp))
     {
-        fscanf(fp, "%d", &num);
+        fscanf(fp, "%d ", &num);
         if (!check(num, *map))
             set(num, *map);
     }
     fclose(fp);
 }
 
-void writeArray(char *filename, int numOfFigure, int **array)
+void writeArray(char *filename, int arraySize, int **array)
 {
-    *array = (int *)calloc(numOfFigure, sizeof(int));
+    *array = (int *)calloc(arraySize, sizeof(int));
     if (!array)
     {
         puts("write array error: array cannot be allocated\n");
@@ -81,7 +80,7 @@ void writeArray(char *filename, int numOfFigure, int **array)
     int index = 0;
     while (!feof(fp))
     {
-        fscanf(fp, "%d ", array + index);
+        fscanf(fp, "%d ", *array + index);
         index++;
     }
     fclose(fp);
@@ -89,7 +88,6 @@ void writeArray(char *filename, int numOfFigure, int **array)
 
 void writeFileWithMap(char *filename, int *map, int mapSize)
 {
-    int mask = 1;
     FILE *fp = fopen(filename, "w+");
     if (!fp)
     {
@@ -100,11 +98,25 @@ void writeFileWithMap(char *filename, int *map, int mapSize)
     {
         for (int j = 0; j < 32; j++)
         {
-            mask = mask << j;
-            if (map[i] & mask)
+            if (map[i] & (1 << j))
                 fprintf(fp, "%d ", i * 32 + j);
         }
-        mask = 1;
+    }
+    fclose(fp);
+}
+
+void writeFileWithArray(char *outFile, int *array, int arraySize)
+{
+    FILE *fp = fopen(outFile, "w+");
+    if (!fp)
+    {
+        puts("write file with array error: cannot open file\n");
+        return;
+    }
+
+    for (int i = 0; i < arraySize; i++)
+    {
+        fprintf(fp, "%d ", array[i]);
     }
     fclose(fp);
 }

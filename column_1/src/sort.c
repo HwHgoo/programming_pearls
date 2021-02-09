@@ -1,11 +1,12 @@
 //
 // Created by hu on 2021/2/4.
 //
-#include "sort.h"
+#include "../include/sort.h"
 #include "fileOperation.h"
 #include <time.h>
 
-double bitmapSort(char *sourceFile, int maxFigure, char *outFile) {
+double bitmapSort(char *sourceFile, int maxFigure, char *outFile)
+{
     clock_t start, finish;
     start = clock();
     int *map;
@@ -16,9 +17,11 @@ double bitmapSort(char *sourceFile, int maxFigure, char *outFile) {
     return finish - start;
 }
 
-int getIndex(int *nums, int low, int high) {
+int getIndex(int *nums, int low, int high)
+{
     int tmp = nums[low];
-    while (low < high) {
+    while (low < high)
+    {
         while (low < high && nums[high] > tmp)
             high--;
         nums[low] = nums[high];
@@ -30,36 +33,25 @@ int getIndex(int *nums, int low, int high) {
     return low;
 }
 
-void qsort(int *nums, int low, int high) {
-    if (low < high) {
+void qsort(int *nums, int low, int high)
+{
+    if (low < high)
+    {
         int index = getIndex(nums, low, high);
         qsort(nums, low, index - 1);
         qsort(nums, index + 1, high);
     }
 }
 
-double quicksort(char *sourceFile, int numOfFigure, char *outFile) {
+double quickSort(char *sourceFile, int numOfFigure, char *outFile)
+{
     clock_t start, finish;
     start = clock();
     int *array;
     writeArray(sourceFile, numOfFigure, &array);
+    qsort(array, 0, numOfFigure - 1);
+    writeFileWithArray(outFile, array, numOfFigure);
     finish = clock();
-    return finish - start;
+    double time = finish - start;
+    return time;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
